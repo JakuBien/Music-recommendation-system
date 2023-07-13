@@ -25,7 +25,7 @@ def get_music_label_list(directory):
 def get_music_dataset(music_directory, labels_directory):
     audios = []
     counter = 0
-    NUM_SECONDS = 10
+    NUM_SECONDS = 12
 
     dataset = get_data(music_directory)
     raw_dataset = convert_data_to_tf(dataset)
