@@ -4,11 +4,16 @@ from PySide6.QtWidgets import (QLineEdit, QGroupBox, QLabel, QPushButton, QSpinB
                                 QListWidgetItem)
 
 from lineWidget import LineWidget
+from videoDownloader import VideoDownloader
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
-        #General
+
+        # Class objects
+        self.videoDownloader = VideoDownloader()
+
+        #General Widget
         self.setWindowTitle("Main Window")
         self.setFixedSize(600, 700)
 
@@ -30,7 +35,8 @@ class MainWindow(QMainWindow):
         self.line.setFrameShape(QFrame.HLine)
         self.line.setFrameShadow(QFrame.Sunken)
         self.VLayout.addWidget(self.line)
-        self.formLayout.addRow("URL:", QLineEdit())
+        self.lineEditInput = QLineEdit()
+        self.formLayout.addRow("URL:", self.lineEditInput)
         self.spinboxNumber = QSpinBox()
         self.spinboxNumber.setValue(10)
         self.formLayout.addRow("NUMBER:", self.spinboxNumber)
@@ -51,6 +57,12 @@ class MainWindow(QMainWindow):
         self.VLayoutOutput.addWidget(self.listOutput)
         self.groupBox_output.setLayout(self.VLayoutOutput)
 
+    def getUserInputURL(self):
+        return self.lineEditInput.text()
+
+    def getUserInputValue(self):
+        return self.spinboxNumber.value()
+
     def addItemToList(self, url):
         item = QListWidgetItem(self.listOutput)
         self.listOutput.addItem(item)
@@ -59,9 +71,13 @@ class MainWindow(QMainWindow):
         self.listOutput.setItemWidget(item, row)
 
     def onStartPressed(self):
-        num = self.spinboxNumber.value()
+        url = self.getUserInputURL()
+        num = self.getUserInputValue()
+
+        self.videoDownloader.convert(url)
+        
         for i in range(num):
-            s = "https://www.youtube.com/watch?v=nfs8NYg7yQM&list=PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj&index=54 #{test}".format(test = i)
+            s = "#{test} {url}".format(test = i, url = self.getUserInputURL())
             self.addItemToList(s)
 
     
